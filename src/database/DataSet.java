@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class DataSet {
+public class DataSet implements Serializable {
 	public String city;
 	public Integer date;
 	public int visits;

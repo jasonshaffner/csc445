@@ -35,10 +35,10 @@ public class Server {
 					if (db.remove((String) ois.readObject())) oos.writeObject(yes);
 					else oos.writeObject((Byte) no);
 				else if (cmd.equals("request"))
-					oos.writeObject(db.request((String) ois.readObject()));
-				
-				oos.close();
+					oos.writeObject(db.requestData((String) ois.readObject()));
+				oos.flush();
 				ois.close();
+				oos.close();
 				client.close();
 			}
 		} catch (Exception ex) { ex.printStackTrace();

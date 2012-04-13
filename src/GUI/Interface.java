@@ -9,11 +9,13 @@ import java.io.*;
 import javax.imageio.*;
 import java.util.*;
 import client.*;
+import database.*;
 
 public class Interface extends JApplet {
 	private static JPanel cardpanel = new JPanel(new CardLayout());
 	private static Map<String, MessageCard> cards = new HashMap<String, MessageCard>();
 	static Client client = new Client();
+	static DataSet[] viewData;
   
   public void init() {
     System.out.println("Initializing...");
@@ -63,14 +65,14 @@ public class Interface extends JApplet {
     RemoveCard removeCard = new RemoveCard();
     addCard(removeCard, "remove");
     
- /*   // query card
+    // query card
     QueryCard queryCard = new QueryCard();
 		addCard(queryCard, "query");
     
     // view cards
 		ViewCard viewCard = new ViewCard();
 		addCard(viewCard, "view");
-   */ 
+
     // don't touch this stuff
     this.getContentPane().add(cardpanel);
     this.validate();

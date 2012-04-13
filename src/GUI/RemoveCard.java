@@ -11,12 +11,12 @@ import database.*;
 public class RemoveCard extends MessageCard implements ActionListener, FocusListener, DocumentListener {
 
 	JLabel header = new JLabel("<html><center><h1>Enter Date to Remove<br></h1></center></html>");
-	JButton removeButton = new JButton("Remove");
-	JButton backButton = new JButton("Back");
-	JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	JTextField dateField = new JTextField("Date (format YYYYMMDD");
+	final JButton removeButton = new JButton("Remove");
+	final JButton backButton = new JButton("Back");
+	final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	final JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	JTextField dateField = new JTextField("Date (format YYYYMMDD",15);
 	boolean datePrev = false;
 	boolean dateFilled = false;
 
@@ -30,7 +30,7 @@ public class RemoveCard extends MessageCard implements ActionListener, FocusList
 		buttonPanel.add(removeButton);
 		buttonPanel.add(backButton);
 		add(buttonPanel,BorderLayout.SOUTH);
-//		removeButton.setEnabled(false);
+		removeButton.setEnabled(false);
 		addActionListeners();
   }
   
@@ -41,7 +41,9 @@ public class RemoveCard extends MessageCard implements ActionListener, FocusList
   
 	public void addActionListeners() {
 		removeButton.addActionListener(this);
+		backButton.addActionListener(this);
 		dateField.addFocusListener(this);
+		dateField.getDocument().addDocumentListener(this);
 	}
 
 	  //clears preset text from username and password fields when cursor enters said field
@@ -56,7 +58,7 @@ public class RemoveCard extends MessageCard implements ActionListener, FocusList
 	//not used
 	public void focusLost(FocusEvent e) {}
 
-	//controls state of enter button, enabling only when both username and password are filled out
+	//controls state of enter button, enabling only when both dateField is filled out
 	public void disableIfEmpty(DocumentEvent e) {
 		if (e.getDocument() == dateField.getDocument()) dateFilled = e.getDocument().getLength() > 0;
 		removeButton.setEnabled(dateFilled);

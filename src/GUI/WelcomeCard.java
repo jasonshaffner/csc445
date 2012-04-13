@@ -41,7 +41,7 @@ public class WelcomeCard extends MessageCard implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == addButton) Interface.switchToCard("add");
 		if (e.getSource() == removeButton) Interface.switchToCard("remove");
-		if (e.getSource() == viewButton) Interface.switchToCard("view");
+		if (e.getSource() == viewButton) Interface.switchToCard("query");
 		
   }
 }

@@ -31,10 +31,9 @@ public class Client {
 						else return false;
 					else {
 						System.out.println("Client closing");
+						oos.flush();
 						ois.close();
 						oos.close();
-						socket.shutdownInput();
-						socket.shutdownOutput();
 						socket.close();
 						return true; 
 					}
@@ -63,10 +62,9 @@ public class Client {
 						else return false;
 					else {
 						System.out.println("Client closing");
+						oos.flush();
 						ois.close();
 						oos.close();
-						socket.shutdownInput();
-						socket.shutdownOutput();
 						socket.close();
 						return true;
 					}
@@ -90,15 +88,15 @@ public class Client {
 					oos.writeObject(key);
 					System.out.println("Client sent request");
 					reply = (Byte) ois.readObject();
-					if (reply == 0) 
+					if (reply == 0){ 
+						System.out.println("Not removed");
 						if (i++ < 10 ) continue;
 						else return false;
-					else {
+					} else {
 						System.out.println("Client closing");
+						oos.flush();
 						ois.close();
 						oos.close();
-						socket.shutdownInput();
-						socket.shutdownOutput();
 						socket.close();
 						return true;
 					}
@@ -108,7 +106,7 @@ public class Client {
 		return false;
 	}
 
-	public  DataSet requestData(String key) {
+	public  DataSet[] requestData(String key) {
 		try {
 			int i = 0;
 			Socket socket = new Socket(host,port);
@@ -120,12 +118,10 @@ public class Client {
 					oos.writeObject("request");
 					oos.writeObject(key);
 					System.out.println("Client request sent");
-					DataSet d = (DataSet) ois.readObject();
+					DataSet[] d = (DataSet[]) ois.readObject();
 					System.out.println("Client closing");
 					ois.close();
 					oos.close();
-					socket.shutdownInput();
-					socket.shutdownOutput();
 					socket.close();
 					return d;
 				} catch (ClassNotFoundException cnf) { System.out.println(cnf); }

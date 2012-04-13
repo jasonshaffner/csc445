@@ -12,30 +12,20 @@ public class Database {
 	public static void build() throws FileNotFoundException {
 		final File[] files = new File("../data").listFiles();
 		for (int i = 0; i < files.length; i++) {
-			System.out.println(i);
 			sc = new Scanner(files[i]);
-			System.out.println(files[i].getName().substring(0,8));
 			sc.useDelimiter(",");
 			while (sc.hasNext()) {
 					DataSet d = new DataSet();
 					d.setCity(sc.next());
-					System.out.println(d.city);
 					d.setVisits(Integer.parseInt(sc.next()));
-					System.out.println(d.visits);
 					d.setPagesPerVisit(Double.parseDouble(sc.next()));
-					System.out.println(d.pagesPerVisit);
 					d.setAvgVisitDuration(sc.next());
-					System.out.println(d.avgVisitDuration);
 					d.setPercentNewVisits(Double.parseDouble(sc.next()));
-					System.out.println(d.percentNewVisits);
 					d.setBounceRate(Double.parseDouble(sc.next()));
-					System.out.println(d.bounceRate);
 					if (d.city.length() > 2) data.put(files[i].getName().substring(0,8) + d.city, d);
 					else data.put(files[i].getName().substring(0,8), d);
 			}
 		}
-		for (String s : data.keySet())
-			System.out.println(s + " " + data.get(s).visits);
 	}
 
 	public static boolean add(File f) throws FileNotFoundException {
@@ -55,16 +45,23 @@ public class Database {
 					System.out.println(d.percentNewVisits);
 					d.setBounceRate(Double.parseDouble(sc.next()));
 					System.out.println(d.bounceRate);
-					if (d.city.length() > 2) data.put(f.getName().substring(0,8) + d.city, d);
-					else data.put(f.getName().substring(0,8), d);
+					String key = f.getName().substring(0,8);
+					if (d.city.length() > 2) {
+						key += d.city;
+						data.put(key, d);
+					} else data.put(key, d);
 			}
 			return true;
 		}
 
 	public static boolean add(DataSet d) {
-		if (d.city.length() > 2) data.put(d.date.toString() + d.city, new DataSet(d.city,d.visits,d.pagesPerVisit,d.avgVisitDuration,d.percentNewVisits,d.bounceRate));
-		else data.put(d.date.toString(), new DataSet(d.city,d.visits,d.pagesPerVisit,d.avgVisitDuration,d.percentNewVisits,d.bounceRate));
-		return true;	
+		String key = d.date.toString();
+		d.date = null;
+		if (d.city.length() > 2) {
+			key += d.city;
+			data.put(key, d); 
+		} else data.put(key, d);
+		return data.containsKey(key);	
 	}
 
 	public static boolean remove(String key) {
@@ -75,7 +72,49 @@ public class Database {
 		return true;
 	}
 
-	public static DataSet request(String key) {
-		return data.get(key);
+	public static DataSet[] requestData(String key) {
+		DataSet[] d;
+		ArrayList<DataSet> dl = new ArrayList<DataSet>();
+		String startDate = key.substring(0,8);
+		String endDate = key.substring(8,16);
+		if (startDate.compareTo(endDate) == 0) {
+			System.out.println("One date");
+			d = new DataSet[1];
+			if (key.length() > 15) {
+				String city = key.substring(16);
+				d[0] = data.get(startDate + city);
+				d[0].date = Integer.parseInt(startDate);
+				return d;
+			} else {
+				d[0] = data.get(startDate);
+				return d;
+			}
+		} else if (key.length() > 16) {
+			System.out.println("City included");
+			String city = key.substring(16);
+			if (city.equals("all")) {
+				for (String s : data.keySet())
+					if (s.length() > 7 && s.substring(0,8).compareTo(startDate) >= 0 && s.substring(0,8).compareTo(endDate) <= 0) {
+						dl.add(data.get(s));
+						dl.get(dl.size()-1).date = Integer.parseInt(s.substring(0,8));
+					}
+			} else
+				for (String s : data.keySet())
+					if (s.contains(city) && s.substring(0,8).compareTo(startDate) >= 0 && s.substring(0,8).compareTo(endDate) <= 0) {
+						dl.add(data.get(s));
+						dl.get(dl.size()-1).date = Integer.parseInt(s.substring(0,8));
+					}
+		} else {
+			System.out.println("Multiple Dates");
+			for (String s : data.keySet())
+				if (s.length() == 8 && s.compareTo(startDate) >= 0 && s.compareTo(endDate) <= 0) {
+					System.out.println(s);
+					dl.add(data.get(s));
+					dl.get(dl.size()-1).date = Integer.parseInt(s);
+				}
+		}
+		d = new DataSet[dl.size()];
+		dl.toArray(d);
+		return d;
 	}
 }
