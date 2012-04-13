@@ -1,8 +1,12 @@
+package GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
+import client.*;
+import database.*;
 
 public class RemoveCard extends MessageCard implements ActionListener, FocusListener, DocumentListener {
 
@@ -24,6 +28,7 @@ public class RemoveCard extends MessageCard implements ActionListener, FocusList
 		centerPanel.add(dateField);
 		add(centerPanel,BorderLayout.CENTER);
 		buttonPanel.add(removeButton);
+		buttonPanel.add(backButton);
 		add(buttonPanel,BorderLayout.SOUTH);
 //		removeButton.setEnabled(false);
 		addActionListeners();
@@ -64,7 +69,7 @@ public class RemoveCard extends MessageCard implements ActionListener, FocusList
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == removeButton)
-				if (Client.removeRecord(dateField.getText())) {
+				if (Interface.client.removeRecord(dateField.getText())) {
 					header.setText("<html><center><h1>Record Removed</h1></center></html>");
 					dateField.setText("Date (format YYYYMMDD)");
 					datePrev = false;

@@ -1,3 +1,6 @@
 #!/bin/bash
 
-rm -rf classes/ 
+rm -r classes/GUI
+rm -r classes/server
+rm -r classes/client
+rm -r classes/database

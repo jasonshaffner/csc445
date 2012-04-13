@@ -1,3 +1,5 @@
+package GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -6,6 +8,7 @@ import java.applet.*;
 import java.io.*;
 import javax.imageio.*;
 import java.util.*;
+import client.*;
 
 public class Interface extends JApplet {
 	private static JPanel cardpanel = new JPanel(new CardLayout());

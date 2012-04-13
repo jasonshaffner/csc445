@@ -1,20 +1,22 @@
+package client;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import database.*;
 
 public class Client {
 
-	int port = 2372;
-	String host = "gee.cs.oswego.edu";
-	Socket socket;
+	final  int port = 2372;
+	final  String host = "localhost";
 
 	public Client() {}
 
-	public boolean sendDataSet(DataSet d) {
+	public  boolean sendDataSet(DataSet d) {
 		try {
 			Byte reply;
 			int i = 0;
-			socket = new Socket(host,port);
+			Socket socket = new Socket(host,port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			while (socket.isConnected()) {
@@ -39,13 +41,14 @@ public class Client {
 				} catch (ClassNotFoundException cnf) { System.out.println(cnf); }
 			}
 		} catch (IOException io) { System.out.println(io); }
+		return false;
 	}
 
-	public boolean sendFile(File f) {
+	public  boolean sendFile(File f) {
 		try {
 			Byte reply;
 			int i = 0;
-			socket = new Socket(host,port);
+			Socket socket = new Socket(host,port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			while (socket.isConnected()) {
@@ -70,13 +73,14 @@ public class Client {
 				} catch (ClassNotFoundException cnf) { System.out.println(cnf); }
 			}
 		} catch (IOException io) { System.out.println(io); }
+		return false;
 	}
 	
-	public boolean removeRecord(String key) {
+	public  boolean removeRecord(String key) {
 		try {
 			Byte reply;
 			int i = 0;
-			socket = new Socket(host,port);
+			Socket socket = new Socket(host,port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			while (socket.isConnected()) {
@@ -101,12 +105,13 @@ public class Client {
 				} catch (ClassNotFoundException cnf) { System.out.println(cnf); }
 			}
 		} catch (IOException io) { System.out.println(io); }
+		return false;
 	}
 
-	public DataSet requestData(String key) {
+	public  DataSet requestData(String key) {
 		try {
 			int i = 0;
-			socket = new Socket(host,port);
+			Socket socket = new Socket(host,port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			while (socket.isConnected()) {
@@ -123,10 +128,10 @@ public class Client {
 					socket.shutdownOutput();
 					socket.close();
 					return d;
-					}
 				} catch (ClassNotFoundException cnf) { System.out.println(cnf); }
 			}
 		} catch (IOException io) { System.out.println(io); }
+		return null;
 	}
 }	
 	

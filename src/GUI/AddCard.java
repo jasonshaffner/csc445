@@ -1,9 +1,13 @@
+package GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.io.*;
+import client.*;
+import database.*;
 
 public class AddCard extends MessageCard implements ActionListener, FocusListener, DocumentListener {
 
@@ -21,7 +25,7 @@ public class AddCard extends MessageCard implements ActionListener, FocusListene
 	JTextField avgDurationField = new JTextField("Average Visit Duration",15);
 	JTextField newVisitorsField = new JTextField("Percent New Visitors",15);
 	JTextField bounceRateField = new JTextField("Bounce Rate",15);
-	//JFileChooser fc = new JFileChooser();
+	JFileChooser fc = new JFileChooser();
 
 	boolean datePrev = false;
 	boolean cityPrev = false;
@@ -51,6 +55,7 @@ public class AddCard extends MessageCard implements ActionListener, FocusListene
 		centerPanel.add(bounceRateField);
 		add(centerPanel,BorderLayout.CENTER);
 		buttonPanel.add(addButton);
+		buttonPanel.add(importButton);
 		buttonPanel.add(backButton);
 		add(buttonPanel,BorderLayout.SOUTH);
 	//	addButton.setEnabled(false);
@@ -137,13 +142,14 @@ public class AddCard extends MessageCard implements ActionListener, FocusListene
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == addButton) {
 				DataSet d = new DataSet();
+				d.date = Integer.parseInt(dateField.getText());
 				d.setCity(cityField.getText());
 				d.setVisits(Integer.parseInt(visitsField.getText()));
 				d.setPagesPerVisit(Double.parseDouble(pPVisitField.getText()));
 				d.setAvgVisitDuration(avgDurationField.getText());
 				d.setPercentNewVisits(Double.parseDouble(newVisitorsField.getText()));
 				d.setBounceRate(Double.parseDouble(bounceRateField.getText()));
-				if (Client.sendDataSet(d)) {
+				if (Interface.client.sendDataSet(d)) {
 					header.setText("<html><center><h1>Record Added</h1></center></html>");
 					dateField.setText("Date (format YYYYMMDD)");
 					cityField.setText("City (Optional)");
@@ -163,14 +169,14 @@ public class AddCard extends MessageCard implements ActionListener, FocusListene
 				} else header.setText("<html><center><h1>Unable to Add Record</h1><br>Check your typing</center></html>");
 		}
 		if (e.getSource() == backButton) Interface.switchToCard("welcome");
-	/*	if (e.getSource() == importButton) {
+		if (e.getSource() == importButton) {
 			try{ //show file selection window
 				fc.showOpenDialog(this);
 			} catch (HeadlessException ex) {	ex.printStackTrace();	}
 			  File selectedFile = fc.getSelectedFile();
 				if (selectedFile != null)
-					if (Client.sendFile(selectedFile)) header.setText("<html><center><h1>Record Added</h1></center></html>");
+					if (Interface.client.sendFile(selectedFile)) header.setText("<html><center><h1>Record Added</h1></center></html>");
 					else header.setText("<html><center><h1>Unable to Add Record</h1><br>Check your typing</center></html>");
-		}*/									
+		}									
   }
 }
