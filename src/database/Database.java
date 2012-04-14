@@ -97,19 +97,24 @@ public class Database {
 	static DataSet parse(String json) {
 		DataSet d = new DataSet();
 		StringTokenizer tokenizer = new StringTokenizer(json);
-		System.out.println(tokenizer.nextToken(","));
-		System.out.println(tokenizer.nextToken(":"));
-		d.setDate(Integer.parseInt(tokenizer.nextToken(",").substring(1).trim()));
-		System.out.println(tokenizer.nextToken(":"));
-		d.setCity(tokenizer.nextToken(",").substring(1).trim());
-		System.out.println(tokenizer.nextToken(":"));
+		tokenizer.nextToken(",");
+		tokenizer.nextToken(":");
+		String s = tokenizer.nextToken(",").substring(1).trim();
+		d.setDate(Integer.parseInt(s.substring(1,s.length()-1)));
+		tokenizer.nextToken(":");
+		s = tokenizer.nextToken(",").substring(1).trim();
+		d.setCity(s.substring(1,s.length()-1));
+		tokenizer.nextToken(":");
+		d.setVisits(Integer.parseInt(tokenizer.nextToken(",").substring(1).trim()));
+		tokenizer.nextToken(":");
 		d.setPagesPerVisit(Double.parseDouble(tokenizer.nextToken(",").substring(1).trim()));
-		System.out.println(tokenizer.nextToken(":"));
-		d.setAvgVisitDuration(tokenizer.nextToken(",").substring(1).trim());
-		System.out.println(tokenizer.nextToken(":"));
-		d.setPercentNewVisits(Integer.parseInt(tokenizer.nextToken(",").substring(1).trim()));
-		System.out.println(tokenizer.nextToken(":"));
-		d.setBounceRate(Integer.parseInt(tokenizer.nextToken("}").substring(1).trim()));
+		tokenizer.nextToken(":");
+		s = tokenizer.nextToken(",").substring(1).trim();
+		d.setAvgVisitDuration(s.substring(1,s.length()-1));
+		tokenizer.nextToken(":");
+		d.setPercentNewVisits(Double.parseDouble(tokenizer.nextToken(",").substring(1).trim()));
+		tokenizer.nextToken(":");
+		d.setBounceRate(Double.parseDouble(tokenizer.nextToken("}").substring(1).trim()));
 		return d;
 	}
 }
