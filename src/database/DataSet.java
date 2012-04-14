@@ -24,6 +24,10 @@ public class DataSet implements Serializable {
 		this.bounceRate = bounceRate;
 	}
 
+	public void setDate(int date) {
+		this.date = date;
+	}
+
 	public void setCity(String city) {
 		this.city = city;
 	}

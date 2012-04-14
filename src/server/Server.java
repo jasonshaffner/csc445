@@ -12,6 +12,7 @@ public class Server {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		Database db = new Database();
+		db.init();
 		db.build();
 		int i = 0;
 		Byte yes = 1;
