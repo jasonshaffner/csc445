@@ -18,6 +18,9 @@ public class Database {
 		} catch (Exception e) { e.printStackTrace(); }
 		db = m.getDB("ga");
 		data = db.getCollection("data");
+		try {
+			if (data.getCount() ==0) build();
+		} catch (FileNotFoundException f) { f.printStackTrace(); }
 	}
 	
 	public static void build() throws FileNotFoundException {
@@ -84,7 +87,7 @@ public class Database {
 		String endDate = key.substring(8,16);
 		BasicDBObject q = new BasicDBObject("$gt",startDate).append("$lt",endDate);
 		query.put("date",q);
-		//if (key.length() > 16) query.put("city",key.substring(16));
+		if (key.length() > 16) query.put("city",key.substring(16));
 		DBCursor cursor = data.find(query);	
 		System.out.println(cursor.size());
 		while (cursor.hasNext()) dl.add(parse(cursor.next().toString()));
