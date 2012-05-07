@@ -11,30 +11,21 @@ import database.*;
 
 public class QueryCard extends MessageCard implements ActionListener, FocusListener, DocumentListener {
 
-	JLabel header = new JLabel("<html><center><h1>Enter Date Range (and optionally city) to View<br></h1></center></html>");
+	JLabel header = new JLabel("<html><center><h1>Enter Query<br></h1></center></html>");
 	final JButton viewButton = new JButton("View");
 	final JButton backButton = new JButton("Back");
 	final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	final JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	JTextField dateStartField = new JTextField("Start Date (format YYYYMMDD)",15);
-	JTextField dateEndField = new JTextField("End Date (format YYYYMMDD)",15);
-	JTextField cityField = new JTextField("City (Optional)",15);
-
-	boolean dateStartPrev = false;
-	boolean dateEndPrev = false;
-	boolean cityPrev = false;
-	boolean dateStartFilled = false;
-	boolean dateEndFilled = false;
+	JTextField queryField = new JTextField("Enter Query",30);
+	boolean queryPrev = false;
 
 	//layout not set in stone... i'll play with it if i have time
   public void initializeThisCard() {
     System.out.println("Initializing pane...");
 		topPanel.add(header);
 		add(topPanel,BorderLayout.NORTH);
-		centerPanel.add(dateStartField);
-		centerPanel.add(dateEndField);
-		centerPanel.add(cityField);
+		centerPanel.add(queryField);
 		add(centerPanel,BorderLayout.CENTER);
 		buttonPanel.add(viewButton);
 		buttonPanel.add(backButton);
@@ -51,36 +42,25 @@ public class QueryCard extends MessageCard implements ActionListener, FocusListe
 	public void addActionListeners() {
 		viewButton.addActionListener(this);
 		backButton.addActionListener(this);
-		dateStartField.addFocusListener(this);
-		dateStartField.getDocument().addDocumentListener(this);
-		dateEndField.addFocusListener(this);
-		dateEndField.getDocument().addDocumentListener(this);
-		cityField.addFocusListener(this);
+		queryField.addFocusListener(this);
+		queryField.getDocument().addDocumentListener(this);
 	}
 
 	  //clears preset text from fields when cursor enters said field
 	public void focusGained(FocusEvent e) {
-		if (dateStartField.isFocusOwner()) {
-			if (!dateStartPrev) {
-				dateStartField.setText("");
-				dateStartPrev = true;
-			} else dateStartField.selectAll();
-		} else if (dateEndField.isFocusOwner()) {
-			if (!dateEndPrev) {
-				dateEndField.setText("");
-				dateEndPrev = true;
-			} else dateEndField.selectAll();
-		} 
+		if (queryField.isFocusOwner())
+			if (!queryPrev) {
+				queryField.setText("");
+				queryPrev = true;
+			} else queryField.selectAll();
 	}
 
 	//not used
 	public void focusLost(FocusEvent e) {}
 
-	//controls state of add button, enabling only when all required fields are filled out
+	//controls state of view button, enabling only when query field is filled out
 	public void disableIfEmpty(DocumentEvent e) {
-		if (e.getDocument() == dateStartField.getDocument()) dateStartFilled = e.getDocument().getLength() > 0;
-		if (e.getDocument() == dateEndField.getDocument()) dateEndFilled = e.getDocument().getLength() > 0;
-		viewButton.setEnabled(dateStartFilled && dateEndFilled);
+		if (e.getDocument() == queryField.getDocument()) viewButton.setEnabled(e.getDocument().getLength() > 0);
 	}
 
 	//not used
@@ -90,12 +70,9 @@ public class QueryCard extends MessageCard implements ActionListener, FocusListe
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == viewButton) {
-				String s = dateStartField.getText();
-				s += dateEndField.getText();
-				s += cityField.getText();
-				Interface.viewData = Interface.client.requestData(s);
-				Interface.switchToCard("view");
-		}
-		if (e.getSource() == backButton) Interface.switchToCard("welcome");
+			String s = queryField.getText();
+			Interface.viewData = Interface.client.requestData(s);
+			Interface.switchToCard("view");
+		} else if (e.getSource() == backButton) Interface.switchToCard("welcome");
   }
 }

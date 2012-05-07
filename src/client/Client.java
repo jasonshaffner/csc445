@@ -106,7 +106,7 @@ public class Client {
 		return false;
 	}
 
-	public  DataSet[] requestData(String key) {
+	public String requestData(String query) {
 		try {
 			int i = 0;
 			Socket socket = new Socket(host,port);
@@ -116,9 +116,9 @@ public class Client {
 				try {
 					System.out.println("Client requesting data");
 					oos.writeObject("request");
-					oos.writeObject(key);
+					oos.writeObject(query);
 					System.out.println("Client request sent");
-					DataSet[] d = (DataSet[]) ois.readObject();
+					String d = (String) ois.readObject();
 					System.out.println("Client closing");
 					ois.close();
 					oos.close();

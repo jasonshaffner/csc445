@@ -31,11 +31,11 @@ public class Server {
 				else if (cmd.equals("file"))
 					if (db.add((File) ois.readObject())) oos.writeObject(yes);
 					else oos.writeObject((Byte) no);
-				else if (cmd.equals("remove"))
-					if (db.remove((String) ois.readObject())) oos.writeObject(yes);
-					else oos.writeObject((Byte) no);
+				//else if (cmd.equals("remove"))
+				//	if (db.remove((String) ois.readObject())) oos.writeObject(yes);
+				//	else oos.writeObject((Byte) no);
 				else if (cmd.equals("request"))
-					oos.writeObject(db.requestData((String) ois.readObject()));
+					oos.writeObject(Query.search((String) ois.readObject(), db.toHashMap()));
 				oos.flush();
 				ois.close();
 				oos.close();

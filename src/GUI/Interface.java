@@ -15,7 +15,7 @@ public class Interface extends JApplet {
 	private static JPanel cardpanel = new JPanel(new CardLayout());
 	private static Map<String, MessageCard> cards = new HashMap<String, MessageCard>();
 	static Client client = new Client();
-	static DataSet[] viewData;
+	static String viewData;
   
   public void init() {
     System.out.println("Initializing...");
