@@ -89,43 +89,14 @@ public class AddCard extends MessageCard implements ActionListener, FocusListene
 
 	  //clears preset text from fields when cursor enters said field
 	public void focusGained(FocusEvent e) {
-		if (dateField.isFocusOwner()) {
-			if (!datePrev) {
-				dateField.setText("");
-				datePrev = true;
-			} else dateField.selectAll();
-		} else if (cityField.isFocusOwner()) {
-			if (!cityPrev) {
-				cityField.setText("");
-				cityPrev = true;
-			} else cityField.selectAll();
-		} else if (visitsField.isFocusOwner()) {
-			if (!visitsPrev) {
-				visitsField.setText("");
-				visitsPrev = true;
-			} else visitsField.selectAll();
-		} else if (pPVisitField.isFocusOwner()) {
-			if (!pPVisitPrev) {
-				pPVisitField.setText("");
-				pPVisitPrev = true;
-			} else pPVisitField.selectAll();
-		} else if (avgDurationField.isFocusOwner()) {
-			if (!avgDurationPrev) {
-				avgDurationField.setText("");
-				avgDurationPrev = true;
-			} else avgDurationField.selectAll();
-		} else if (bounceRateField.isFocusOwner()) {
-			if (!bounceRatePrev) {
-				bounceRateField.setText("");
-				bounceRatePrev = true;
-			} else bounceRateField.selectAll();
-		} else if (newVisitorsField.isFocusOwner()) {
-			if (!newVisitorsPrev) {
-				newVisitorsField.setText("");
-				newVisitorsPrev = true;
-			} else newVisitorsField.selectAll();
-		}
-}
+		if (dateField.isFocusOwner()) dateField.selectAll();
+		else if (cityField.isFocusOwner()) cityField.selectAll();
+		else if (visitsField.isFocusOwner()) visitsField.selectAll();
+		else if (pPVisitField.isFocusOwner()) pPVisitField.selectAll();
+		else if (avgDurationField.isFocusOwner()) avgDurationField.selectAll();
+		else if (bounceRateField.isFocusOwner()) bounceRateField.selectAll();
+		else if (newVisitorsField.isFocusOwner()) newVisitorsField.selectAll();
+	}
 
 	//not used
 	public void focusLost(FocusEvent e) {}

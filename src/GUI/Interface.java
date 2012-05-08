@@ -11,16 +11,16 @@ import java.util.*;
 import client.*;
 import database.*;
 
-public class Interface extends JApplet {
+public class Interface {
 	private static JPanel cardpanel = new JPanel(new CardLayout());
 	private static Map<String, MessageCard> cards = new HashMap<String, MessageCard>();
 	static Client client = new Client();
 	static String viewData;
   
-  public void init() {
+  public static void main(String[] args) {
     System.out.println("Initializing...");
      try {
-      javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+      javax.swing.SwingUtilities.invokeLater(new Runnable() {
         public void run() {
           createGUI();
         }
@@ -51,10 +51,15 @@ public class Interface extends JApplet {
     cards.get(cardname).initializeThisCard();
   }
 	
-  public void createGUI() {
-    // add cards here
+  public static void createGUI() {
+		JFrame frame = new JFrame("Database");
+ 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800,600);
+    frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		
+
     WelcomeCard welcomeCard = new WelcomeCard();
-    
     addCard(welcomeCard, "welcome");
     
     // add card
@@ -74,8 +79,7 @@ public class Interface extends JApplet {
 		addCard(viewCard, "view");
 
     // don't touch this stuff
-    this.getContentPane().add(cardpanel);
-    this.validate();
+    frame.getContentPane().add(cardpanel);
     switchToCard("welcome");
   }
 }

@@ -127,15 +127,16 @@ public class Database {
 	}
 	
 	static void saveToCSV(DataSet d, String key) {
-		boolean append = false;
+		boolean append = true;
 		try {
 			File f = new File("../data/" + key.substring(0,8) + ".csv");
 			if (!f.exists()) {
 				f.createNewFile();
-				append = true;
+				append = false;
 			}
 			FileOutputStream fos = new FileOutputStream(f,append);
 			byte[] b = ",".getBytes();
+			byte[] c = ":".getBytes();
 			if (append) fos.write(b);
 			fos.write(d.city.getBytes());
 			fos.write(b);
@@ -143,7 +144,11 @@ public class Database {
 			fos.write(b);
 			fos.write(String.valueOf(d.pagesPerVisit).getBytes());
 			fos.write(b);
-			fos.write(String.valueOf(d.avgVisitDuration).getBytes());
+			fos.write(String.valueOf(d.avgVisitDuration/3600).getBytes());
+			fos.write(c);
+			fos.write(String.valueOf((d.avgVisitDuration/60) % 60).getBytes());
+			fos.write(c);
+			fos.write(String.valueOf(d.avgVisitDuration % 60).getBytes());
 			fos.write(b);
 			fos.write(String.valueOf(d.percentNewVisits).getBytes());
 			fos.write(b);

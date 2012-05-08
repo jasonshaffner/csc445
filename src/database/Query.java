@@ -41,7 +41,7 @@ public class Query
 		
 		//0=false, 1=true. Used to determine which columns used in table output
 		int[] formatIndex = {0,0,0,0,0,0};
-		String table = "";
+		String table = "<html>";	
 		
 		try
 		{
@@ -60,7 +60,7 @@ public class Query
 					table += "\t";
 					for(int num = 0; num < r.length; num++)
 						table += r[num];
-					table += "\n";
+					table += "<br>";
 				}
 				table += showFooter(formatIndex);
 				return table;
@@ -459,7 +459,7 @@ public class Query
 						}//END valid table column IF
 					}//END field iteration in record FOR
 					if(valid)
-						table += "\n";
+						table += "<br>";
 				}//END iteration over database WHILE
 				table += showFooter(formatIndex);
 				return table;
@@ -485,7 +485,7 @@ public class Query
 						if(formatIndex[num] == 1)
 							table += r[num];
 					}
-					table += "\n";
+					table += "<br>";
 				}
 				table += showFooter(formatIndex);
 				return table;	
@@ -493,11 +493,11 @@ public class Query
 		}
 		catch(FormatException e)
 		{
-			table = "\n\tERROR in query syntax: " + e.getM() + "\n";
+			table = "<br>ERROR in query syntax: " + e.getM() + "<br>";
 		}
 		catch(NumberFormatException e)
 		{
-			table = "\n\tERROR in query: Invalid compare value! Must be a number.\n";
+			table = "<br>ERROR in query: Invalid compare value! Must be a number.<br>";
 		}
 		
 		//If this return is reached, table = an error message
@@ -525,12 +525,12 @@ public class Query
 	public static String[] beautify(DataSet d)
 	{
 		//Account for length of formatting to be added to each String
-		int cityWidth  = city_width - 4;
-		int visitWidth = visit_width - 4;
-		int ppvWidth   = ppv_width - 4;
-		int avdWidth   = avd_width - 4;
-		int pnvWidth   = pnv_width - 4;
-		int brWidth    = br_width - 4;
+		int cityWidth  = city_width;
+		int visitWidth = visit_width;
+		int ppvWidth   = ppv_width;
+		int avdWidth   = avd_width;
+		int pnvWidth   = pnv_width;
+		int brWidth    = br_width;
 		
 		//Create a String array to hold the formatted attributes
 		String[] s = new String[6];
@@ -552,10 +552,10 @@ public class Query
 		String v = Integer.toString(d.visits);
 		
 		//If visits length is too long, truncate the extra digits.
-		if(v.length() > visitWidth){v = v.substring(0, visitWidth);}
+		if(v.length() > visitWidth) v = v.substring(0, visitWidth);
 		
 		//If visits length is too small, pad with spaces to desired length.
-		if(v.length() < visitWidth){v = pad(v, visitWidth);}
+		if(v.length() < visitWidth) v = pad(v, visitWidth);
 		
 		//Store formatted visits into array at slot 1
 		s[1] = "| " + v + " |";
@@ -565,7 +565,7 @@ public class Query
 		String ppv = Double.toString(d.pagesPerVisit);
 		
 		//If pages_per_visit length is too long, truncate the extra digits.
-		if(ppv.length() > ppvWidth){ppv = ppv.substring(0, ppvWidth);}
+		if(ppv.length() > ppvWidth) ppv = ppv.substring(0, ppvWidth);
 		
 		//If pages_per_visit length is too small, pad with spaces to desired length.
 		if(ppv.length() < ppvWidth){ppv = pad(ppv, ppvWidth);}
@@ -591,23 +591,22 @@ public class Query
 		String pnv = Double.toString(d.percentNewVisits);
 		
 		//If percent_new_visits length is too long, truncate the extra digits.
-		if(pnv.length() > pnvWidth){pnv = pnv.substring(0, pnvWidth);}
+		if(pnv.length() > pnvWidth) pnv = pnv.substring(0, pnvWidth);
 		
 		//If percent_new_visits length is too small, pad with spaces to desired length.
-		if(pnv.length() < pnvWidth){pnv = pad(pnv, pnvWidth);}
+		if(pnv.length() < pnvWidth) pnv = pad(pnv, pnvWidth);
 		
 		//Store formatted percent_new_visits into array at slot 4
 		s[4] = "| " + pnv + " |";
 		
-	
 		//PHASE 5: Bounce Rate
 		String b = Double.toString(d.bounceRate);
 		
 		//If visits length is too long, truncate the extra digits.
-		if(b.length() > brWidth){b = b.substring(0, brWidth);}
+		if(b.length() > brWidth) b = b.substring(0, brWidth);
 		
 		//If visits length is too small, pad with spaces to desired length.
-		if(b.length() < brWidth){b = pad(b, brWidth);}
+		if(b.length() < brWidth) b = pad(b, brWidth);
 		
 		//Store formatted visits into array at slot 5
 		s[5] = "| " + b + " |";
@@ -624,12 +623,12 @@ public class Query
 	************************************************************************************/
 	private static String beautifyCity(String c)
 	{
-		int cityWidth  = city_width - 4;
+		int cityWidth  = city_width;
 		//If city length is too long, truncate the extra letters.
-		if(c.length() > cityWidth){c = c.substring(0, cityWidth);}
+		if(c.length() > cityWidth) c = c.substring(0, cityWidth);
 		
 		//If city length is too small, pad with spaces to desired length.
-		if(c.length() < cityWidth){c = pad(c, cityWidth);}
+		if(c.length() < cityWidth) c = pad(c, cityWidth);
 		
 		//Store formatted city into array at slot 0
 		return "| " + c + " |";
@@ -656,7 +655,7 @@ public class Query
 	{
 		while(s.length() < l)
 		{
-			s = s + " ";
+			s = s + " &nbsp; ";
 		}
 		return s;
 	}
@@ -669,9 +668,9 @@ public class Query
 	private static String showHeader(int[] f)
 	{
 		//Declare horizontal rules and header)
-		String top_hr = "\t";
-		String header = "\n\t";
-		String bot_hr = "\n\t";
+		String top_hr = "";
+		String header = "<br>";
+		String bot_hr = "<br>";
 		
 		if(f[0] == 1)
 		{
@@ -710,7 +709,7 @@ public class Query
 			bot_hr += addDashes(br_width);
 		}
 		
-		return top_hr + header + bot_hr + "\n";
+		return top_hr + header + bot_hr + "<br>";
 	}
 	/************************************************************************************
 	*	METHOD: addDashes(int)
@@ -738,7 +737,7 @@ public class Query
 		int i = s.length();
 		while(i < w-1)
 		{
-			s += " ";
+			s += " &nbsp ";
 			i++;
 		}
 		s += "|";
@@ -751,7 +750,7 @@ public class Query
 	************************************************************************************/
 	private static String showFooter(int[] f)
 	{
-		String s = "\t";
+		String s = "";
 		if(f[0] == 1)
 			s += addDashes(city_width);
 		

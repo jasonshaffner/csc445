@@ -37,9 +37,10 @@ public class DataSet implements Serializable {
 	}
 		
 	public void setAvgVisitDuration(String avgVisitDuration) {
-		int secs = 60 * 60 * Integer.parseInt(avgVisitDuration.substring(0,2));
-		secs += 60 * Integer.parseInt(avgVisitDuration.substring(3,5));
-		secs += Integer.parseInt(avgVisitDuration.substring(6));
+		StringTokenizer st = new StringTokenizer(avgVisitDuration,":");
+		int secs = 60 * 60 * Integer.parseInt(st.nextToken());
+		secs += 60 * Integer.parseInt(st.nextToken());
+		secs += Integer.parseInt(st.nextToken());
 		this.avgVisitDuration = secs;
 	}
 

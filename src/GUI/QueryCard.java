@@ -18,7 +18,7 @@ public class QueryCard extends MessageCard implements ActionListener, FocusListe
 	final JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	JTextField queryField = new JTextField("Enter Query",30);
-	boolean queryPrev = false;
+	boolean queryPrev;
 
 	//layout not set in stone... i'll play with it if i have time
   public void initializeThisCard() {
@@ -48,11 +48,7 @@ public class QueryCard extends MessageCard implements ActionListener, FocusListe
 
 	  //clears preset text from fields when cursor enters said field
 	public void focusGained(FocusEvent e) {
-		if (queryField.isFocusOwner())
-			if (!queryPrev) {
-				queryField.setText("");
-				queryPrev = true;
-			} else queryField.selectAll();
+		if (queryField.isFocusOwner()) queryField.selectAll();
 	}
 
 	//not used
