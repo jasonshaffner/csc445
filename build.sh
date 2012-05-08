@@ -2,7 +2,7 @@
 
 CLASSPATH="."
 BUILDDIR="../classes/"
-
+mkdir classes/
 cd src/
 echo "Building..."
 javac -cp $CLASSPATH -d $BUILDDIR $1 server/*.java 
