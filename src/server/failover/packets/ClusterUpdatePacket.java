@@ -5,14 +5,10 @@
 package failover.packets;
 
 import java.net.DatagramPacket;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ClusterUpdatePacket extends Packet {
 	
@@ -26,6 +22,20 @@ public class ClusterUpdatePacket extends Packet {
 	 * Synchronization response sent from slave.
 	 */
 	public static final byte ACK	=	0x02;
+	/**
+	 * Request to join the cluster network.
+	 * A slave which was started after the original master's initialization
+	 * must send this packet to the master in order to request entry into the
+	 * cluster. It will be added as a slave and must immediately start the
+	 * slave process in order to receive the cluster update.
+	 */
+	public static final byte JOIN	=	0x03;
+	/**
+	 * Notification of new master.
+	 * When a new master is appointed, this packet will be sent from the new
+	 * master to the client in order to inform it of the change.
+	 */
+	public static final byte NEW_MASTER	=	0x04;
 	
 	private byte subType;
 	private InetAddress clientAddress, masterAddress;
@@ -36,6 +46,8 @@ public class ClusterUpdatePacket extends Packet {
 		
 		// Parse packet data
 		subType = data[1];
+		
+		// SYNC
 		if(subType == SYNC) {
 			slaveList = new ArrayList<InetAddress>();
 			try {
@@ -50,6 +62,10 @@ public class ClusterUpdatePacket extends Packet {
 				System.out.println("ClusterUpdatePacket.ClusterUpdatePacket.UnknownHostException");
 				System.exit(-1);
 			}
+		// NEW_MASTER
+		} else if(subType == NEW_MASTER) {
+			masterAddress = sender;
+			clientAddress = receiver;
 		}
 	}
 	

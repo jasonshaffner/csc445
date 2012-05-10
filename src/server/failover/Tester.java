@@ -7,17 +7,14 @@ package failover;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Tester {
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws UnknownHostException {
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -25,12 +22,15 @@ public class Tester {
 		Node.setVerbose(System.out);
 		
 		for(;;) {
-			String input = null;
+			String input = null, master = null;
 			if(args.length > 0) {
 				if(args[0].equals("-m"))
 					input = "m";
-				else if(args[0].equals("-s"))
+				else if(args[0].equals("-s")) {
 					input = "s";
+					if(args.length > 1)
+						master = args[1];
+				}
 			} else {
 				System.out.println("Initialize this node as a slave (s) or master (m)?");
 				input = sc.next();
@@ -38,8 +38,13 @@ public class Tester {
 			
 			// If just starting a slave
 			if(input.equalsIgnoreCase("s")) {
-				Node.startSlave();
-				System.out.println("Waiting on master...");
+				if(master == null) {
+					Node.startSlave();
+					System.out.println("Waiting on master...");
+				} else {
+					InetAddress host = InetAddress.getByName(master);
+					Node.joinCluster(host);
+				}
 				break;
 			// If starting the master, must get other slaves
 			} else if(input.equalsIgnoreCase("m")) {

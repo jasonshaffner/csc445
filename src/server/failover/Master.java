@@ -65,6 +65,17 @@ public class Master extends Node {
 				Node.send(new MasterNegPacket(MasterNegPacket.DECLINE, pack.getSender()));
 				log("Master proposal from "+pack.getSender()+" denied.");
 			}
+		
+		// Node addition
+		} else if(packet.getType() == Packet.CLUSTER_UP) {
+			ClusterUpdatePacket pack = (ClusterUpdatePacket)packet;
+			if(pack.getSubType() == ClusterUpdatePacket.JOIN) {
+				Node.addSlave(pack.getSender());
+				Node.sendClusterUpdate();
+				timer.scheduleAtFixedRate(new Task(pack.getSender()), 0, delay);
+				log("New slave added: "+pack.getSender());
+			}
+			
 		}
 	}
 	

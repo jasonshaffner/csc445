@@ -83,6 +83,18 @@ abstract class Node extends Thread {
 	}
 	
 	/**
+	 * Send a request to join an already-existing cluster. This node will then
+	 * be initialized as a slave.
+	 * 
+	 * @param master	the master node to become a slave to
+	 */
+	public static void joinCluster(InetAddress master) {
+		Node.startSlave();
+		ClusterUpdatePacket pack = new ClusterUpdatePacket(ClusterUpdatePacket.JOIN, master);
+		Node.send(pack);
+	}
+	
+	/**
 	 * Returns this node's current list of all slaves in the network.
 	 * @return	list of nodes
 	 */
@@ -184,6 +196,11 @@ abstract class Node extends Thread {
 	
 	protected synchronized static List<InetAddress> removeSlave(InetAddress addr) {
 		Node.slaveList.remove(addr);
+		return slaveList;
+	}
+	
+	protected synchronized static List<InetAddress> addSlave(InetAddress addr) {
+		Node.slaveList.add(addr);
 		return slaveList;
 	}
 	

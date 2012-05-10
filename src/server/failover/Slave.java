@@ -64,6 +64,11 @@ public class Slave extends Node {
 				Node.setSlaveList(pack.getSlaveList());
 				Node.send(new ClusterUpdatePacket(ClusterUpdatePacket.ACK, pack.getSender()));
 				log("Slave list updated.");
+				
+				if(!running) {
+					setMaster(pack.getMaster());
+					startHeartbeat();
+				}
 			}
 			
 		// Master negotiation
@@ -72,8 +77,10 @@ public class Slave extends Node {
 			switch(pack.getSubType()) {
 				case MasterNegPacket.ACCEPT:
 					acceptedSlaves.put(pack.getSender(), Boolean.TRUE);
-					if(acceptedSlaves.size() >= Node.getSlaveList().size()-1)
+					if(acceptedSlaves.size() >= Node.getSlaveList().size()-1) {
 						Node.declareMaster();
+						notifyClient();
+					}
 					break;
 				case MasterNegPacket.DECLINE:
 					acceptedSlaves = null;
@@ -111,6 +118,11 @@ public class Slave extends Node {
 			}
 		}
 		acceptedSlaves = new HashMap<InetAddress, Boolean>();
+	}
+	
+	private void notifyClient() {
+		ClusterUpdatePacket pack = new ClusterUpdatePacket(ClusterUpdatePacket.NEW_MASTER, Node.getClientAddress());
+		Node.send(pack);
 	}
 	
 	
