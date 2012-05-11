@@ -1,0 +1,13 @@
+Members of group:
+Nicholas Ibarluzea <ibarluze@oswego.edu>,
+Corey O'Neill <coneill@oswego.edu>,
+Jason Shaffner <jshaffne@oswego.edu>,
+Minh Tran <mtran1@oswego.edu>,
+Benjamin Parsons bparsons@oswego.edu
+
+Contributions:
+Nicholas Ibarluzea - All functionality within the "failover" package
+Corey O'Neill - Classes related to the key-value store and formatting
+Jason Shaffner - Built framework for client and server
+Minh Tran - Bug fixes within Corey's code
+Benjamin - Combined functionality from failover into server/client

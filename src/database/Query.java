@@ -41,7 +41,7 @@ public class Query
 		
 		//0=false, 1=true. Used to determine which columns used in table output
 		int[] formatIndex = {0,0,0,0,0,0};
-		String table = "<html>";	
+		String table = "<html>";
 		
 		try
 		{
@@ -52,17 +52,21 @@ public class Query
 				//get * case means return all data as a table String
 				for(int b = 0; b < formatIndex.length; b++)
 					formatIndex[b] = 1;
-				table += showHeader(formatIndex);
+				table += showHeaderHTML(formatIndex);
 				while(i.hasNext())
 				{
 					DataSet d = i.next();
-					String[] r = beautify(d);
-					table += "\t";
+					//String[] r = beautify(d);
+					String[] r = beautifyHTML(d);
+					//table += "\t";
+					table += "<tr>";
+					
 					for(int num = 0; num < r.length; num++)
-						table += r[num];
-					table += "<br>";
+						table += "<td>" + r[num] + "</td>";
+					table += "</tr>";
 				}
-				table += showFooter(formatIndex);
+				//table += showFooterHTML(formatIndex);
+				table += "</table>";
 				return table;
 			}
 			//Return error message if the first token is not the 'get' operator
@@ -216,7 +220,8 @@ public class Query
 				try{value = Double.parseDouble(qry);}
 				catch(NumberFormatException e){city_value = qry;}
 				
-				table += showHeader(formatIndex);
+				//table += showHeader(formatIndex);
+				table += showHeaderHTML(formatIndex);
 				
 				//Iterate the database (ie For each recording in database)
 				while(i.hasNext())
@@ -224,9 +229,13 @@ public class Query
 					//Declare 'where' clause parsing variables
 					boolean valid = false;
 					boolean tab = false;
+					boolean tr = false;
 					DataSet d = i.next();
-					String[] r = beautify(d);
+					String[] r = beautifyHTML(d);
 					
+					//Predetermine if this record has needed data
+					if(formatIndex[0]==1||formatIndex[1]==1||formatIndex[2]==1||formatIndex[3]==1||formatIndex[4]==1||formatIndex[5]==1)
+						tr = true;
 					//For each field in record
 					for(int num = 0; num < r.length; num++)
 					{
@@ -240,216 +249,120 @@ public class Query
 								if(!comparison.equals("="))
 									throw new FormatException("City cannot be > or <, only =");
 								//If a city matching the query criteria is found
-								if(r[0].equals(beautifyCity(city_value)))
+								if(r[0].equals(city_value))
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 							}
 							//If Constraint = VISITS
 							else if(constraint.equals("visits"))
 							{
 								//If Comparison is the equals operator & this record meets query criteria
-								if(comparison.equals("=") && new Double(getRawValue(r[1])).intValue()==new Double(value).intValue())
+								if(comparison.equals("=") && new Double(r[1]).intValue()==new Double(value).intValue())
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the greater than operator & this record meets query criteria
-								else if(comparison.equals(">") && getRawValue(r[1])>value)
+								else if(comparison.equals(">") && Double.parseDouble(r[1])>value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the less than operator & this record meets query criteria
-								else if(comparison.equals("<") && getRawValue(r[1])<value)
+								else if(comparison.equals("<") && Double.parseDouble(r[1])<value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 							}
 							//If Constraint = PAGES PER VIST
 							else if(constraint.equals("ppv"))
 							{
 								//If Comparison is the equals operator & this record meets query criteria
-								if(comparison.equals("=") && new Double(getRawValue(r[2])).intValue()==new Double(value).intValue())
+								if(comparison.equals("=") && new Double(r[2]).intValue()==new Double(value).intValue())
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the greater than operator & this record meets query criteria
-								else if(comparison.equals(">") && getRawValue(r[2])>value)
+								else if(comparison.equals(">") && Double.parseDouble(r[2])>value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the less than operator & this record meets query criteria
-								else if(comparison.equals("<") && getRawValue(r[2])<value)
+								else if(comparison.equals("<") && Double.parseDouble(r[2])<value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 							}
 							//If Constraint = AVERAGE VISIT DURATION
 							else if(constraint.equals("avd"))
 							{
 								//If Comparison is the equals operator & this record meets query criteria
-								if(comparison.equals("=") && new Double(getRawValue(r[3])).intValue()==new Double(value).intValue())
+								if(comparison.equals("=") && new Double(r[3]).intValue()==new Double(value).intValue())
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the greater than operator & this record meets query criteria
-								else if(comparison.equals(">") && getRawValue(r[3])>value)
+								else if(comparison.equals(">") && Double.parseDouble(r[3])>value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the less than operator & this record meets query criteria
-								else if(comparison.equals("<") && getRawValue(r[3])<value)
+								else if(comparison.equals("<") && Double.parseDouble(r[3])<value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 							}
 							//If Constraint = PERCENT OF NEW VISITS
 							else if(constraint.equals("ponv"))
 							{
 								//If Comparison is the equals operator & this record meets query criteria
-								if(comparison.equals("=") && new Double(getRawValue(r[4])).intValue()==new Double(value).intValue())
+								if(comparison.equals("=") && new Double(r[4]).intValue()==new Double(value).intValue())
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the greater than operator & this record meets query criteria
-								else if(comparison.equals(">") && getRawValue(r[4])>value)
+								else if(comparison.equals(">") && Double.parseDouble(r[4])>value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the less than operator & this record meets query criteria
-								else if(comparison.equals("<") && getRawValue(r[4])<value)
+								else if(comparison.equals("<") && Double.parseDouble(r[4])<value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 							}
 							//If Constraint = BOUNCE RATE
 							else if(constraint.equals("br"))
 							{
 								//If Comparison is the equals operator & this record meets query criteria
-								if(comparison.equals("=") && new Double(getRawValue(r[5])).intValue()==new Double(value).intValue())
+								if(comparison.equals("=") && new Double(r[5]).intValue()==new Double(value).intValue())
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the greater than operator & this record meets query criteria
-								else if(comparison.equals(">") && getRawValue(r[5])>value)
+								else if(comparison.equals(">") && Double.parseDouble(r[5])>value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}
 								//If Comparison is the less than operator & this record meets query criteria
-								else if(comparison.equals("<") && getRawValue(r[5])<value)
+								else if(comparison.equals("<") && Double.parseDouble(r[5])<value)
 								{
 									//Add num'th field of this record to table
-									if(!tab)
-									{
-										tab = true;
-										table += "\t";
-									}
-									valid = true;
-									table += r[num];
+									table += "<td>" + r[num] + "</td>";
 								}//END Comparison IF
 							}//END Constraint IF
 							else
@@ -458,10 +371,12 @@ public class Query
 							}
 						}//END valid table column IF
 					}//END field iteration in record FOR
-					if(valid)
-						table += "<br>";
+					if(tr)
+						table += "</tr>";
 				}//END iteration over database WHILE
-				table += showFooter(formatIndex);
+				//table += showFooter(formatIndex);
+				table += "</table></html>";
+				
 				return table;
 			}
 			//If query String does not have 'where' clause but there is more in String
@@ -474,34 +389,60 @@ public class Query
 			else
 			{
 				//Build table of all records with specified columns
-				table += showHeader(formatIndex);
+				table += showHeaderHTML(formatIndex);
 				while(i.hasNext())
 				{
 					DataSet d = i.next();
-					String[] r = beautify(d);
-					table += "\t";
+					String[] r = beautifyHTML(d);
+					table += "<tr>";
 					for(int num = 0; num < r.length; num++)
 					{
 						if(formatIndex[num] == 1)
-							table += r[num];
+							table += "<td>" + r[num] + "</td>";
 					}
-					table += "<br>";
+					table += "</tr>";
 				}
-				table += showFooter(formatIndex);
+				//table += showFooter(formatIndex);
+				table += "</table></html>";
 				return table;	
 			}//END if there is a 'where' clause IF
 		}
 		catch(FormatException e)
 		{
-			table = "<br>ERROR in query syntax: " + e.getM() + "<br>";
+			table = "\n\tERROR in query syntax: " + e.getM() + "\n";
 		}
 		catch(NumberFormatException e)
 		{
-			table = "<br>ERROR in query: Invalid compare value! Must be a number.<br>";
+			table = "\n\tERROR in query: Invalid compare value! Must be a number.\n";
 		}
 		
 		//If this return is reached, table = an error message
 		return table;
+	}
+	/************************************************************************************
+	*	METHOD: beautifyHTML(DataSet)
+	*	DIRECTIVE: 
+	*		-Takes a record from the data base and creates a String array to hold each
+	*		record:
+	*			String[0] = city
+	*			String[1] = visits
+	*			String[2] = pagesPerVisit
+	*			String[3] = avgVisitDuration
+	*			String[4] = percentNewVisits
+	*			String[5] = bounceRate
+	*		-The real formatting will be done via HTML so padding necessary
+	************************************************************************************/
+	private static String[] beautifyHTML(DataSet d)
+	{
+		//Create a String array to hold the attributes
+		String[] s = new String[6];
+		s[0] = d.city;
+		s[1] = Integer.toString(d.visits);
+		s[2] = Double.toString(d.pagesPerVisit);
+		s[3] = Integer.toString(d.avgVisitDuration);
+		s[4] = Double.toString(d.percentNewVisits);
+		s[5] = Double.toString(d.bounceRate);
+		return s;
 	}
 	/************************************************************************************
 	*	METHOD: beautify(DataSet)
@@ -522,15 +463,15 @@ public class Query
 	*		specific field width so that when these formatting devices are added to the
 	*		String, it will be the appropriate length.
 	************************************************************************************/
-	public static String[] beautify(DataSet d)
+	private static String[] beautify(DataSet d)
 	{
 		//Account for length of formatting to be added to each String
-		int cityWidth  = city_width;
-		int visitWidth = visit_width;
-		int ppvWidth   = ppv_width;
-		int avdWidth   = avd_width;
-		int pnvWidth   = pnv_width;
-		int brWidth    = br_width;
+		int cityWidth  = city_width - 4;
+		int visitWidth = visit_width - 4;
+		int ppvWidth   = ppv_width - 4;
+		int avdWidth   = avd_width - 4;
+		int pnvWidth   = pnv_width - 4;
+		int brWidth    = br_width - 4;
 		
 		//Create a String array to hold the formatted attributes
 		String[] s = new String[6];
@@ -552,10 +493,10 @@ public class Query
 		String v = Integer.toString(d.visits);
 		
 		//If visits length is too long, truncate the extra digits.
-		if(v.length() > visitWidth) v = v.substring(0, visitWidth);
+		if(v.length() > visitWidth){v = v.substring(0, visitWidth);}
 		
 		//If visits length is too small, pad with spaces to desired length.
-		if(v.length() < visitWidth) v = pad(v, visitWidth);
+		if(v.length() < visitWidth){v = pad(v, visitWidth);}
 		
 		//Store formatted visits into array at slot 1
 		s[1] = "| " + v + " |";
@@ -565,7 +506,7 @@ public class Query
 		String ppv = Double.toString(d.pagesPerVisit);
 		
 		//If pages_per_visit length is too long, truncate the extra digits.
-		if(ppv.length() > ppvWidth) ppv = ppv.substring(0, ppvWidth);
+		if(ppv.length() > ppvWidth){ppv = ppv.substring(0, ppvWidth);}
 		
 		//If pages_per_visit length is too small, pad with spaces to desired length.
 		if(ppv.length() < ppvWidth){ppv = pad(ppv, ppvWidth);}
@@ -591,22 +532,23 @@ public class Query
 		String pnv = Double.toString(d.percentNewVisits);
 		
 		//If percent_new_visits length is too long, truncate the extra digits.
-		if(pnv.length() > pnvWidth) pnv = pnv.substring(0, pnvWidth);
+		if(pnv.length() > pnvWidth){pnv = pnv.substring(0, pnvWidth);}
 		
 		//If percent_new_visits length is too small, pad with spaces to desired length.
-		if(pnv.length() < pnvWidth) pnv = pad(pnv, pnvWidth);
+		if(pnv.length() < pnvWidth){pnv = pad(pnv, pnvWidth);}
 		
 		//Store formatted percent_new_visits into array at slot 4
 		s[4] = "| " + pnv + " |";
 		
+	
 		//PHASE 5: Bounce Rate
 		String b = Double.toString(d.bounceRate);
 		
 		//If visits length is too long, truncate the extra digits.
-		if(b.length() > brWidth) b = b.substring(0, brWidth);
+		if(b.length() > brWidth){b = b.substring(0, brWidth);}
 		
 		//If visits length is too small, pad with spaces to desired length.
-		if(b.length() < brWidth) b = pad(b, brWidth);
+		if(b.length() < brWidth){b = pad(b, brWidth);}
 		
 		//Store formatted visits into array at slot 5
 		s[5] = "| " + b + " |";
@@ -623,12 +565,12 @@ public class Query
 	************************************************************************************/
 	private static String beautifyCity(String c)
 	{
-		int cityWidth  = city_width;
+		int cityWidth  = city_width - 4;
 		//If city length is too long, truncate the extra letters.
-		if(c.length() > cityWidth) c = c.substring(0, cityWidth);
+		if(c.length() > cityWidth){c = c.substring(0, cityWidth);}
 		
 		//If city length is too small, pad with spaces to desired length.
-		if(c.length() < cityWidth) c = pad(c, cityWidth);
+		if(c.length() < cityWidth){c = pad(c, cityWidth);}
 		
 		//Store formatted city into array at slot 0
 		return "| " + c + " |";
@@ -655,9 +597,44 @@ public class Query
 	{
 		while(s.length() < l)
 		{
-			s = s + " &nbsp; ";
+			s = s + " ";
 		}
 		return s;
+	}
+	/************************************************************************************
+	*	METHOD: showHeader(int[])
+	*	DIRECTIVE: 
+	*		-Returns a String representing the table header in HTML
+	*		-Takes an integer array as a parameter indicating which columns to be added
+	************************************************************************************/
+	private static String showHeaderHTML(int[] f)
+	{
+		String header = "<table border=\"1\"><tr>";
+		if(f[0] == 1)
+		{
+			header += "<td>City</td>";
+		}
+		if(f[1] == 1)
+		{
+			header += "<td>Visits</td>";
+		}
+		if(f[2] == 1)
+		{
+			header += "<td>PagesPerVisit</td>";
+		}
+		if(f[3] == 1)
+		{
+			header += "<td>AvgVisitDur</td>";
+		}
+		if(f[4] == 1)
+		{
+			header += "<td>PercentOfNewVisits</td>";
+		}
+		if(f[5] == 1)
+		{
+			header += "<td>BounceRate</td>";
+		}
+		return header + "</tr>";
 	}
 	/************************************************************************************
 	*	METHOD: showHeader(int[])
@@ -668,9 +645,9 @@ public class Query
 	private static String showHeader(int[] f)
 	{
 		//Declare horizontal rules and header)
-		String top_hr = "";
-		String header = "<br>";
-		String bot_hr = "<br>";
+		String top_hr = "\t";
+		String header = "\n\t";
+		String bot_hr = "\n\t";
 		
 		if(f[0] == 1)
 		{
@@ -709,7 +686,7 @@ public class Query
 			bot_hr += addDashes(br_width);
 		}
 		
-		return top_hr + header + bot_hr + "<br>";
+		return top_hr + header + bot_hr + "\n";
 	}
 	/************************************************************************************
 	*	METHOD: addDashes(int)
@@ -737,7 +714,7 @@ public class Query
 		int i = s.length();
 		while(i < w-1)
 		{
-			s += " &nbsp ";
+			s += " ";
 			i++;
 		}
 		s += "|";
@@ -750,7 +727,7 @@ public class Query
 	************************************************************************************/
 	private static String showFooter(int[] f)
 	{
-		String s = "";
+		String s = "\t";
 		if(f[0] == 1)
 			s += addDashes(city_width);
 		

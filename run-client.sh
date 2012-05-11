@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd classes
-java GUI.Interface 
+appletviewer -J-Djava.security.policy=polfile index.html
