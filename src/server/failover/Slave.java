@@ -102,6 +102,11 @@ public class Slave extends Node {
 	}
 	
 	private void proposeMaster() {
+		// If last node in cluster, just claim master
+		if(Node.getSlaveList().size() == 1) {
+			Node.declareMaster();
+			notifyClient();
+		}
 		// Send master proposal packets
 		MasterNegPacket propPack = new MasterNegPacket(MasterNegPacket.PROPOSE, null);
 		timestamp = propPack.getTimestamp();
